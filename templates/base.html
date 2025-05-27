@@ -55,12 +55,7 @@
                                         <ul id="navigation">
                                             <li><a class="active" href="{% url "main:index" %}">home</a></li>
                                             <li><a href="{% url "main:about" %}">About</a></li>
-                                            <li><a href="track.html">tracks</a></li>
-                                            <li><a href="#">blog <i class="ti-angle-down"></i></a>
-                                                <ul class="submenu">
-                                                    <li><a href="blog.html">blog</a></li>
-                                                    <li><a href="single-blog.html">single-blog</a></li>
-                                                </ul>
+                                            <li><a href="{% url "blog:blog_list" %}">Blog</a></li>
                                             </li>
                                             <li><a href="#">pages <i class="ti-angle-down"></i></a>
                                                 <ul class="submenu">
