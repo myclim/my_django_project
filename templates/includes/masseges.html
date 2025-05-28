@@ -1,0 +1,22 @@
+{% if messages %}
+    <style>
+        .messages {
+            list-style: none;
+            padding: 0;
+            margin: 10px 0;
+        }
+        .messages li {
+            font-size: 18px; /* увеличенный размер шрифта */
+            color: white;    /* белый цвет текста */
+            background-color: rgba(0, 0, 0, 0.5); /* фон для читаемости (по желанию) */
+            padding: 8px 12px;
+            margin-bottom: 8px;
+            border-radius: 4px;
+        }
+    </style>
+    <ul class="messages">
+        {% for message in messages %}
+            <li class="{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}

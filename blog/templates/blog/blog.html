@@ -25,19 +25,21 @@
                     {% for blog in blogs %}
                         <article class="blog_item">
                             <div class="blog_item_img">
-                                <img
-                                    class="card-img rounded-0"
-                                    src="{% if blog.image %}{{ blog.image.url }}{% else %}{% static 'temp/no_photo.jpg' %}{% endif %}"
-                                    alt="{{ blog.blog_title }}"
-                                />
-                                <a href="" class="blog_item_date">
+                                <a href="{% url "blog:blog_detail" blog_pk=blog.id %}">
+                                    <img
+                                        class="card-img rounded-0"
+                                        src="{% if blog.image %}{{ blog.image.url }}{% else %}{% static 'temp/no_photo.jpg' %}{% endif %}"
+                                        alt="{{ blog.blog_title }}"
+                                    />
+                                </a>
+                                <a href="{% url "blog:blog_detail" blog_pk=blog.id %}" class="blog_item_date">
                                     <h3>{{ blog.create_at|date:"j" }}</h3>
                                     <p>{{ blog.create_at|date:"b" }}</p>
                                 </a>
                             </div>
 
                             <div class="blog_details">
-                                <a class="d-inline-block" href="single-blog.html">
+                                <a class="d-inline-block" href="{% url "blog:blog_detail" blog_pk=blog.id %}">
                                     <h2>
                                         {{ blog.blog_title }}
                                     </h2>
@@ -45,14 +47,18 @@
                                 <p>
                                     {{ blog.description|truncatewords:100}}
                                 </p>
-                                <ul class="blog-info-link">
-                                    <li>
-                                        <a href="#"
-                                            ><i class="fa fa-comments"></i> 03
-                                            Comments</a
-                                        >
-                                    </li>
-                                </ul>
+                                <p class="like-info">
+                                    <span class="align-middle"
+                                        ><i class="fa fa-eye"></i
+                                    ></span>
+                                    {{ blog.watched }}
+                                </p>
+                                <p class="like-info">
+                                    <span class="align-middle"
+                                        ><i class="fa fa-calendar"></i
+                                    ></span>
+                                    {{ blog.update_at }}
+                                </p>
                             </div>
                         </article>
                     {% endfor %}
@@ -60,7 +66,6 @@
                     <!-- Пагинация -->
                         <nav class="blog-pagination justify-content-center d-flex">
                             <ul class="pagination">
-                                {# Стрелка "назад" - показываем только если есть предыдущая страница #}
                                 {% if page_obj.has_previous %}
                                     <li class="page-item">
                                         <a href="?page={{ page_obj.previous_page_number }}" class="page-link" aria-label="Previous">
@@ -69,7 +74,6 @@
                                     </li>
                                 {% endif %}
 
-                                {# Номера страниц #}
                                 {% for num in page_obj.paginator.page_range %}
                                     {% if num >= page_obj.number|add:-2 and num <= page_obj.number|add:2 %}
                                         <li class="page-item {% if page_obj.number == num %}active{% endif %}">
@@ -78,7 +82,6 @@
                                     {% endif %}
                                 {% endfor %}
 
-                                {# Стрелка "вперед" - показываем только если есть следующая страница #}
                                 {% if page_obj.has_next %}
                                     <li class="page-item">
                                         <a href="?page={{ page_obj.next_page_number }}" class="page-link" aria-label="Next">

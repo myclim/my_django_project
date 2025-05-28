@@ -27,6 +27,3 @@ class BlogModel(models.Model):
     
     def __str__(self):
         return self.blog_title
-
-
-
