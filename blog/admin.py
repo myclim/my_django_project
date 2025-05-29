@@ -5,7 +5,7 @@ from blog.models import BlogModel
 @admin.register(BlogModel)
 class BlogModelAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('blog_title',)}
-    list_display = ['pk', 'blog_title']
+    list_display = ['pk', 'author', 'blog_title']
     search_fields = ['blog_title', 'description']
     fields = [
         'blog_title',
@@ -13,9 +13,10 @@ class BlogModelAdmin(admin.ModelAdmin):
         'description',
         ('create_at', 'update_at'),
         'watched',
-        'image'
+        'author',
+        'image',
     ]
-    readonly_fields = ('watched', 'create_at', 'update_at')
+    readonly_fields = ('watched', 'create_at', 'update_at', 'author')
 
 
 

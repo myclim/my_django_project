@@ -1,0 +1,92 @@
+{% load static %}
+
+{% include "users/includes/input_includes.html" %}
+
+<body id="profile">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                <div class="profile-display">
+                    <!-- Аватарка -->
+                    <div class="profile-avatar-container center-align mb-4">
+                        {% if user.image  %}
+                            <img src="{{ user.image.url}}" class="circle responsive-img" width="150" height="150">
+                        {% else %}
+                            <img src="{% static "temp/giga.jpg" %}" class="circle responsive-img" width="150" height="150">
+                        {% endif %}
+                    </div>
+                    
+                    <div class="profile-info">
+                        <div class="profile-field">
+                            <span class="grey-text">Username:</span>
+                            <span class="white-text">{{ user.username }}</span>
+                        </div>
+                        <div class="profile-field">
+                            <span class="grey-text">Firs name:</span>
+                            <span class="white-text">{{ user.first_name }}</span>
+                        </div>
+                        <div class="profile-field">
+                            <span class="grey-text">Last name:</span>
+                            <span class="white-text">{{ user.last_name }}</span>
+                        </div>
+                        <div class="profile-field">
+                            <span class="grey-text">Email:</span>
+                            <span class="white-text">{{ user.email }}</span>
+                        </div>
+                        <div class="profile-field">
+                            <span class="grey-text">Phone:</span>
+                            <span class="white-text">{{ user.phone|default:"Not specified" }}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="text-right mt-4">
+                        <a href="{% url "blog:create_blog" %}" class="waves-effect btn-large btn-large-white px-4 tm-border-radius-0">
+                            Добавить статью
+                        </a>
+                        {% if user.blogs.exists %}
+                        <a href="{% url "blog:user_list" %}" class="waves-effect btn-large btn-large-white px-4 tm-border-radius-0">
+                            Мои статьи
+                        </a>
+                        {% endif %}
+                        <a href="{% url "user:update" %}" class="waves-effect btn-large btn-large-white px-4 tm-border-radius-0">
+                            Редактировать
+                        </a>
+                        <a href="{% url "main:index" %}" class="waves-effect btn-large btn-large-white px-4 tm-border-radius-0">
+                            Home
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer class="row tm-mt-big mb-3">
+            <div class="col-xl-12">
+                <p class="text-center grey-text text-lighten-2 tm-footer-text-small">
+                    Copyright &copy; {% now "Y" %} Company Name 
+                </p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="{% static "login/js/jquery-3.2.1.slim.min.js" %}"></script>
+    <script src="{% static "login/js/materialize.min.js" %}"></script>
+    <style>
+        /* Дополнительные стили для профиля */
+        #profile {
+            padding: 50px 0;
+        }
+        .profile-display {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 8px;
+        }
+        .profile-field {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .profile-field span:first-child {
+            display: inline-block;
+            width: 100px;
+        }
+    </style>
+</body>

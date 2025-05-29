@@ -1,0 +1,100 @@
+{% load static %}
+
+{% include "users/includes/input_includes.html" %}
+
+<body id="register">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                <header class="mb-5">
+                    <h3 class="mt-0 white-text">Update Profile</h3>
+                    <p class="grey-text mb-4">Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</p>
+                    <p class="grey-text">Vestibulum neque neque, porttitor quis lacinia eu, iaculis id dui. Mauris quis velit lectus.
+                    </p>
+                    <a href="{% url "main:index" %}" class="waves-effect btn-large btn-large-white px-4 black-text">Home - page</a>
+                </header>
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                <form action="{% url "user:update" %}" method="post" class="tm-signup-form" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="input-field">
+                        <input value="{{ form.username.value }}" id="id_username" name="username" type="text" class="validate">
+                    </div>
+                    <div class="input-field">
+                        <input value="{{ form.first_name.value }}" id="id_first_name" name="first_name" type="text" class="validate">
+                    </div>
+                    <div class="input-field">
+                        <input value="{{ form.last_name.value }}" id="id_last_name" name="last_name" type="text" class="validate">
+                    </div>
+                    <div class="input-field">
+                        <input value="{{ form.email.value }}" id="id_email" name="email" type="email" class="validate" >
+                    </div>
+                    <div class="input-field">
+                        <input value="{{ form.phone.value }}" id="id_phone" name="phone" type="text" class="validate">
+                    </div>
+                    <!-- Avatar Upload Field -->
+                     <div class="col-md-12 mb-3 text-center">
+                        {% if user.image %}
+                            <img src="{{ user.image.url }}"
+                                alt="Аватар пользователя" class="img-fluid rounded-circle"
+                                style="max-width: 150px;">
+                        {% else %} 
+                            <img src="{% static "deps/images/baseavatar.jpg" %}"
+                                alt="Аватар пользователя" class="img-fluid rounded-circle"
+                                style="max-width: 150px;">
+                        {% endif %}
+                        <input type="file" class="form-control mt-3" id="id_image"
+                            name='image'
+                            accept="image/*">
+                        {% if form.image.errors %}
+                            <div class="alert alert-danger alert-dismissible fade show">{{ form.image.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="text-right mt-4">
+                        <button type="submit" class="waves-effect btn-large btn-large-white px-4 tm-border-radius-0">Сохранить</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <footer class="row tm-mt-big mb-3">
+            <div class="col-xl-12">
+                <p class="text-center grey-text text-lighten-2 tm-footer-text-small">
+                    Copyright &copy; 2018 Company Name 
+                    
+                    - <a rel="nofollow" href="http://www.tooplate.com/view/2105-input">Input</a> by 
+                    <a rel="nofollow" href="http://tooplate.com" class="tm-footer-link">Tooplate</a>
+                </p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="{% static "login/js/jquery-3.2.1.slim.min.js" %}"></script>
+    <script src="{% static "login/js/materialize.min.js" %}"></script>
+    <script>
+        $(document).ready(function () {
+            $('select').formSelect();
+            
+            // Avatar preview functionality
+            $('#avatar').change(function(e) {
+                if (this.files && this.files[0]) {
+                    var reader = new FileReader();
+                    
+                    reader.onload = function(e) {
+                        $('#avatar-preview').attr('src', e.target.result);
+                        $('.avatar-preview').show();
+                    }
+                    
+                    reader.readAsDataURL(this.files[0]);
+                }
+            });
+            
+            // Change avatar button
+            $('#change-avatar').click(function(e) {
+                e.preventDefault();
+                $('#avatar').val('').trigger('change');
+                $('.avatar-preview').hide();
+                $('#avatar').click();
+            });
+        });
+    </script>
+</body>

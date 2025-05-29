@@ -1,5 +1,9 @@
-from django.views.generic import DetailView, ListView
+from django.urls import reverse_lazy
+from django.views.generic import CreateView, DetailView, ListView
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 from blog.models import BlogModel
+from blog.forms import CreateBlogForm
 
 
 class BlogListView(ListView):
@@ -32,3 +36,34 @@ class BlogDetailView(DetailView):
         context["title"] = 'Blog - single'
         return context
     
+
+class CreateBlogView(LoginRequiredMixin, CreateView):
+    template_name = 'blog/create_blog.html'
+    form_class = CreateBlogForm
+    model = BlogModel
+    success_url = reverse_lazy('blog:blog_list')
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = 'Create - page'
+        return context
+
+
+class UserBlogListView(LoginRequiredMixin, ListView):
+    model = BlogModel
+    template_name = 'blog/user_list.html'
+    context_object_name = 'user_blogs'
+    paginate_by = 4
+
+    def get_queryset(self):
+        return BlogModel.objects.filter(author=self.request.user)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = 'Create - page'
+        return context
+

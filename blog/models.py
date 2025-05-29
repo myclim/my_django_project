@@ -1,9 +1,10 @@
 from django.db import models
 from django.utils.text import slugify
-
+from users.models import UserModel
 
 
 class BlogModel(models.Model):
+    author = models.ForeignKey(to=UserModel, on_delete=models.CASCADE, verbose_name='Автор', related_name='blogs')
     blog_title = models.CharField(max_length=150, unique=True, verbose_name='Название')
     slug = models.SlugField(max_length=200, unique=True, db_index=True, verbose_name='URL', blank=True)
     description = models.TextField(verbose_name='Описание')
