@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block content %}
+<!-- bradcam_area -->
+<div class="bradcam_area breadcam_bg_2">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="bradcam_text text-center">
+                    <h3>Редактирование статьи</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--/ bradcam_area -->
+
+<!--================Blog Area =================-->
+<section class="blog_area single-post-area section-padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 posts-list">
+                <form method="post" enctype="multipart/form-data" class="blog-edit-form">
+                    {% csrf_token %}
+                    
+                    <div class="single-post">
+                        <div class="feature-img">
+                            <img
+                                class="img-fluid mb-3"
+                                src="{% if blog_detail.image %}{{ blog_detail.image.url }}{% else %}{% static 'temp/no_photo.jpg' %}{% endif %}"
+                                alt="Текущее изображение"
+                                id="image-preview"
+                            />
+                            <div class="form-group">
+                                <label for="id_image">Изменить изображение:</label>
+                                <input type="file" class="form-control-file" id="id_image" name="image">
+                            </div>
+                        </div>
+                        
+                        <div class="blog_details">
+                            <div class="form-group">
+                                <label for="id_blog_title">Заголовок статьи:</label>
+                                <input type="text" class="form-control" id="id_blog_title" name="blog_title" 
+                                       value="{{ blog_detail.blog_title }}" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="id_description">Содержание статьи:</label>
+                                <textarea class="form-control" id="id_description" name="description" 
+                                          rows="10" required>{{ blog_detail.description }}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="navigation-top">
+                        <div class="d-sm-flex justify-content-between text-center">
+                            <p class="like-info">
+                                <span class="align-middle"><i class="fa fa-eye"></i></span>
+                                Просмотры: {{ blog_detail.watched }}
+                            </p>
+                            <p class="like-info">
+                                <span class="align-middle"><i class="fa fa-calendar"></i></span>
+                                Последнее обновление: {{ blog_detail.update_at }}
+                            </p>
+                        </div>
+                        
+                        <div class="form-actions text-right mt-4">
+                            <button type="submit" class="btn btn-primary mr-2">Сохранить изменения</button>
+                            <a href="{% url "blog:delete_blog" delete_pk=blog_detail.pk %}" class="btn">Удалить</a>
+                            <a href="{% url "blog:user_list" %}" class="btn btn-secondary">Отмена</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    // Предпросмотр изображения перед загрузкой
+    document.getElementById('id_image').addEventListener('change', function(e) {
+        if (e.target.files.length > 0) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                document.getElementById('image-preview').src = event.target.result;
+            };
+            reader.readAsDataURL(e.target.files[0]);
+        }
+    });
+</script>
+
+
+{% endblock content %}

@@ -1,0 +1,48 @@
+
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block content %}
+<!-- bradcam_area -->
+<div class="bradcam_area breadcam_bg_2">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="bradcam_text text-center">
+                    <h3>Редактирование статьи</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--/ bradcam_area -->
+
+<!--================Blog Area =================-->
+<section class="blog_area single-post-area section-padding">
+    <h2>Удалить статью "{{ object.blog_title }}"?</h2>
+    <div class="container">
+        <div class="row">
+                <form method="post">
+                    {% csrf_token %}
+                    <input 
+                        type="submit" 
+                        value="Удалить" 
+                        style="
+                            background-color: #ff4444;
+                            color: white;
+                            border: none;
+                            padding: 10px 20px;
+                            border-radius: 5px;
+                            cursor: pointer;
+                            font-size: 16px;
+                        "
+                    >
+                </form>
+            <a href="{% url "blog:user_list" %}" class='btn'>Отмена</a>
+        </div>
+    </div>
+</section>
+
+{% endblock content %}
+

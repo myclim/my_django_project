@@ -1,9 +1,10 @@
+from django.core.exceptions import PermissionDenied
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, DetailView, ListView
+from django.views.generic import CreateView, DetailView, ListView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from blog.models import BlogModel
-from blog.forms import CreateBlogForm
+from blog.forms import CreateBlogForm, UserUpdateBlogForm
 
 
 class BlogListView(ListView):
@@ -27,8 +28,9 @@ class BlogDetailView(DetailView):
 
     def get_object(self, queryset=None):
         obj = super().get_object(queryset)
-        obj.watched += 1
-        obj.save()
+        if obj.author != self.request.user:
+            obj.watched += 1
+            obj.save()
         return obj
 
     def get_context_data(self, **kwargs):
@@ -67,3 +69,41 @@ class UserBlogListView(LoginRequiredMixin, ListView):
         context["title"] = 'Create - page'
         return context
 
+
+class UserUpdateBlogView(LoginRequiredMixin, UpdateView):
+    template_name = 'blog/user_single_blog.html'
+    model = BlogModel
+    form_class = UserUpdateBlogForm
+    context_object_name = 'blog_detail'
+    success_url = reverse_lazy("blog:user_list")
+
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset)
+        if obj.author != self.request.user:
+            raise PermissionDenied("Вы не можете редактировать эту статью")
+        return obj
+    
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = 'Update - page'
+        return context
+    
+
+class UserBlogDeleteView(LoginRequiredMixin, DeleteView):
+    model = BlogModel
+    success_url = reverse_lazy('blog:user_list')
+    pk_url_kwarg = 'delete_pk'
+    template_name = 'blog/blogmodel_confirm_delete.html'
+
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset)
+        if obj.author == self.request.user:
+            return obj
+        else:
+            raise PermissionDenied("Вы можете удалять только свои статьи")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = 'Delete - page'
+        return context
