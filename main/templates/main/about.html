@@ -27,7 +27,7 @@
             </div>
             <div class="col-xl-7 col-md-6">
                 <div class="about_info">
-                    <h3>Jack Kalib</h3>
+                    <h3>{{ user.username }}</h3>
                     <p>
                         Esteem spirit temper too say adieus who direct esteem.
                         It esteems luckily or picture placing drawing.
@@ -38,7 +38,9 @@
                         people might depend.
                     </p>
                     <div class="signature">
-                        <img src="{% static "img/about/signature.png" %}" alt="" />
+                        <img src="{% if user.image %}{{ user.image.url}}{% else %}{% static "temp/giga.jpg" %}{% endif %}" 
+                        alt="{{ user.name }}" 
+                        style="max-width: 400px; max-height: 300px; border-radius: 50%;" />
                     </div>
                 </div>
             </div>
@@ -46,23 +48,4 @@
     </div>
 </div>
 <!--/ about_area  -->
-<div class="singer_video">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-xl-10">
-                <div class="image">
-                    <img src="img/about/singer.png" alt="" />
-                    <div class="video_btn">
-                        <a
-                            class="popup-video"
-                            href="https://www.youtube.com/watch?v=Hzmp3z6deF8"
-                            ><i class="fa fa-play"></i
-                        ></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 {% endblock content %}

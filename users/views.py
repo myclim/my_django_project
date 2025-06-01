@@ -40,7 +40,6 @@ class RegisterUserView(CreateView):
         messages.success(self.request, f'{user.username} - Регистрация прошла успешно')
         return response
 
-    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["title"] = 'Register - page' 
@@ -55,7 +54,6 @@ class ProfileUserView(LoginRequiredMixin, TemplateView):
         context["title"] = 'Profile - page'
         context['user'] = UserModel.objects.get(username=self.request.user)
         return context
-
 
 
 class UpdateUserView(LoginRequiredMixin, UpdateView):
@@ -78,7 +76,6 @@ class UpdateUserView(LoginRequiredMixin, UpdateView):
         context = super().get_context_data(**kwargs)
         context["title"] = 'Update - page'
         return context
-
 
 
 def logout(request):

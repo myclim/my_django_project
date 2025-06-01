@@ -5,6 +5,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from blog.models import BlogModel
 from blog.forms import CreateBlogForm, UserUpdateBlogForm
+from blog.utils import post_search
+
+
 
 
 class BlogListView(ListView):
@@ -13,11 +16,16 @@ class BlogListView(ListView):
     context_object_name = 'blogs'
     paginate_by = 4
 
+    def get_queryset(self):
+        search = self.request.GET.get('q', None)
+        if search:
+            return post_search(search)
+        return super().get_queryset()
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["title"] = 'Blog - page'
         return context
-    
 
 
 class BlogDetailView(DetailView):
